@@ -9,7 +9,7 @@
   --grey: #333;
   font-size: 62.5%;
 }
-
+ 
 body {
   background: #ededed;
   color: var(--grey);
@@ -120,6 +120,7 @@ footer {
 .task-type {
   color: var(--secondary);
   font-size: 1.55rem;
+  font-weight: lighter;
 }
 .task-actions {
   display: flex;
