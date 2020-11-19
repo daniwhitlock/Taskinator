@@ -1,6 +1,7 @@
-//Assign the button element object repressentation to a variable in the file
+//GLOBAL VARIABLES
 var formEl = document.querySelector("#task-form");
 var tasksToDoEl = document.querySelector("#tasks-to-do");
+var taskIdCounter = 0;
 
 //when the add a new task button is clicked, it will create a new task
 var taskFormHandler = function(event) {
@@ -31,19 +32,71 @@ var taskFormHandler = function(event) {
 
 var createTaskEl = function(taskDataObj) {
      //create list item
-     var listItemEl = document.createElement("li"); //create a var for the list item
-     listItemEl.className = "task-item"; //adding the style of the css .task-item class
+     var listItemEl = document.createElement("li"); //create var for li
+     listItemEl.className = "task-item"; //adding the style of the css 
      
+     //add task id as a custom attribute
+     listItemEl.setAttribute("data-task-id", taskIdCounter);
+
      //create div to hold task info and add to list item
      var taskInfoEl = document.createElement("div");
      taskInfoEl.className = "task-info"; 
      //add HTML content to div
-     taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskDataObj.name + "<h3><span class='task-type'>" + taskDataObj.type + "</span>";
- 
-     //Append/add to web page browser
-     listItemEl.appendChild(taskInfoEl); //adds the taskInfoEl information to the list item
+     taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskDataObj.name + "<h3><span class='task-type'>" + taskDataObj.type + "</span>";listItemEl.appendChild(taskInfoEl); //adds the taskInfoEl information to the list item
+
+     var taskActionsEl = createTaskActions(taskIdCounter);
+     listItemEl.appendChild(taskActionsEl);
+
      //add entire list item to list
      tasksToDoEl.appendChild(listItemEl);
+
+     //increase task counter for next unique id
+     taskIdCounter++;
+};
+
+var createTaskActions = function(taskId) {
+    //Create new div element
+    var actionContainerEl = document.createElement("div");
+    actionContainerEl.className = "task-actions";
+
+    //create edit button
+    var editButtonEl = document.createElement("button");
+    editButtonEl.textContent = "Edit";
+    editButtonEl.className = "btn edit-btn";
+    editButtonEl.setAttribute("data-task-id", taskId);
+    actionContainerEl.appendChild(editButtonEl);
+    
+
+    //create delete button
+    var deleteButtonEl = document.createElement("button");
+    deleteButtonEl.textContent = "Delete";
+    deleteButtonEl.className ="btn delete-btn";
+    deleteButtonEl.setAttribute("data-task-id", taskId);
+    actionContainerEl.appendChild(deleteButtonEl);
+
+    //create Dropdown
+    var statusSelectEl = document.createElement("select");
+    statusSelectEl.className = "select-status";
+    statusSelectEl.setAttribute("name", "status-change");
+    statusSelectEl.setAttribute("data-task-id", taskId);
+    actionContainerEl.appendChild(statusSelectEl);
+
+    //add options to Dropdown
+    var statusChoices = ["To Do", "In Progress", "Completed"];
+    for (var i=0; i < statusChoices.length; i++) {
+        //create option element
+        var statusOptionEl = document.createElement("option");
+        statusOptionEl.textContent = statusChoices[i];
+        statusOptionEl.setAttribute("value", statusChoices[i]);
+
+        //append to select
+        statusSelectEl.appendChild(statusOptionEl);
+    }
+
+    return actionContainerEl;
+
+
+
 };
 
 
