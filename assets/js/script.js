@@ -6,6 +6,8 @@ var pageContentEl = document.querySelector("#page-content");
 var tasksInProgressEl = document.querySelector("#tasks-in-progress");
 var tasksCompletedEl = document.querySelector("#tasks-completed");
 
+
+
 //when the add a new task button is clicked, it will create a new task
 var taskFormHandler = function(event) {
 
@@ -45,6 +47,9 @@ var createTaskEl = function(taskDataObj) {
      
      //add task id as a custom attribute
      listItemEl.setAttribute("data-task-id", taskIdCounter);
+     
+     //add ability to drag and drop tasks
+     listItemEl.setAttribute("draggable", "true");
 
      //create div to hold task info and add to list item
      var taskInfoEl = document.createElement("div");
@@ -185,10 +190,22 @@ var taskStatusChangeHandler = function(event) {
     
 };
 
+var dragTaskHandler = function(event) {
+    var taskId = event.target.getAttribute("data-task-id");
+    event.dataTransfer.setData("text/plain", taskId);
+    var getId = event.dataTransfer.getData("text/plain");
+    console.log("getID: ", getId, typeof getId);
+};
+
+var dropZoneDragHandler = function(event) {
+    event.preventDefault();
+};
+
 //On a button click, create a task using the createTaskHandler function
 
 formEl.addEventListener("submit", taskFormHandler);
 pageContentEl.addEventListener("click", taskButtonHandler);
 pageContentEl.addEventListener("change", taskStatusChangeHandler);
-
+pageContentEl.addEventListener("dragstart", dragTaskHandler);
+pageContentEl.addEventListener("dragover", dropZoneDragHandler);
 
